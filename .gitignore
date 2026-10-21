@@ -8,3 +8,5 @@ db.sqlite3
 !.env.example
 staticfiles/
 media/
+
+analyzer/#python object oriented programming.txt
