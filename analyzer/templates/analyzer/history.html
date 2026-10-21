@@ -1,0 +1,262 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analysis History | JobShield AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f4f7fb;
+            color: #172033;
+        }
+
+        header {
+            background: #14213d;
+            color: white;
+            padding: 22px 8%;
+        }
+
+        .brand {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .brand span {
+            color: #67e8c5;
+        }
+
+        main {
+            max-width: 950px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .page-heading {
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 {
+            margin-bottom: 8px;
+        }
+
+        .page-heading p {
+            color: #64748b;
+            line-height: 1.6;
+        }
+
+        .report-card {
+            background: white;
+            padding: 24px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            box-shadow: 0 5px 20px rgba(20, 33, 61, 0.06);
+        }
+
+        .report-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .risk-score {
+            font-size: 22px;
+            font-weight: bold;
+        }
+
+        .risk-level {
+            display: inline-block;
+            margin-top: 8px;
+            padding: 6px 10px;
+            border-radius: 6px;
+            background: #eaf0f7;
+            font-size: 13px;
+            font-weight: bold;
+        }
+
+        .job-text {
+            margin-top: 18px;
+            padding: 14px;
+            background: #f8fafc;
+            border-radius: 8px;
+            line-height: 1.6;
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+        }
+
+        .warning-list {
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .report-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 11px 15px;
+            border: none;
+            border-radius: 7px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .download-button {
+            background: #087f6b;
+        }
+
+        .download-button:hover {
+            background: #066653;
+        }
+
+        .delete-button {
+            background: #b91c1c;
+        }
+
+        .delete-button:hover {
+            background: #991b1b;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 25px;
+            color: #087f6b;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .empty-state {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            line-height: 1.7;
+        }
+
+        footer {
+            padding: 25px;
+            text-align: center;
+            color: #64748b;
+            font-size: 13px;
+        }
+
+        @media (max-width: 600px) {
+            .report-card {
+                padding: 18px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="brand">JobShield <span>AI</span></div>
+        <p>Saved job advertisement analyses</p>
+    </header>
+
+    <main>
+        <section class="page-heading">
+            <h1>Analysis History</h1>
+            <p>
+                Review your saved reports or download an analysis
+                as a PDF for future reference.
+            </p>
+        </section>
+
+        {% if reports %}
+            {% for report in reports %}
+                <article class="report-card">
+                    <div class="report-top">
+                        <div>
+                            <div class="risk-score">
+                                {{ report.score }} / 100
+                            </div>
+
+                            <div class="risk-level">
+                                {{ report.risk_level }} Risk
+                            </div>
+                        </div>
+
+                        <div style="color: #64748b; font-size: 13px;">
+                            {{ report.created_at|date:"d M Y, h:i A" }}
+                        </div>
+                    </div>
+
+                    <h3>Original Job Advertisement</h3>
+
+                    <div class="job-text">{{ report.job_description }}</div>
+
+                    <h3>Detected Warning Indicators</h3>
+
+                    {% if report.warnings %}
+                        <ul class="warning-list">
+                            {% for warning in report.warnings %}
+                                <li>{{ warning }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p>
+                            No warning indicators from the current
+                            checklist were detected.
+                        </p>
+                    {% endif %}
+
+                    <div class="report-actions">
+                        <a
+                            class="button download-button"
+                            href="{% url 'download_report_pdf' report.id %}"
+                        >
+                            Download PDF
+                        </a>
+
+                        <form
+                            method="post"
+                            action="{% url 'delete_report' report.id %}"
+                            onsubmit="return confirm('Are you sure you want to delete this report?');"
+                            style="margin: 0;"
+                        >
+                            {% csrf_token %}
+                            <button
+                                type="submit"
+                                class="button delete-button"
+                            >
+                                Delete Report
+                            </button>
+                        </form>
+                    </div>
+                </article>
+            {% endfor %}
+        {% else %}
+            <section class="empty-state">
+                <h2>No saved reports yet</h2>
+                <p>
+                    Analyze a job advertisement while logged in
+                    to save it to your history.
+                </p>
+            </section>
+        {% endif %}
+
+        <a class="back-link" href="/">← Back to JobShield AI</a>
+    </main>
+
+    <footer>
+        JobShield AI — Make informed career decisions.
+    </footer>
+</body>
+</html>

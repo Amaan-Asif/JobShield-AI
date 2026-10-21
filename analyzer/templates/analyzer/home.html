@@ -1,0 +1,639 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobShield AI | Job Scam Risk Analyzer</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        :root {
+            --navy: #101b35;
+            --green: #087f6b;
+            --mint: #b9f5df;
+            --background: #f4f7fb;
+            --text: #172033;
+            --muted: #64748b;
+            --border: #e2e8f0;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            background: var(--background);
+            color: var(--text);
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        header {
+            background: var(--navy);
+            color: white;
+            padding: 18px 7%;
+        }
+
+        .nav {
+            max-width: 1150px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .brand {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.7px;
+        }
+
+        .brand span {
+            color: var(--mint);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .nav-links a {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .nav-links a:hover {
+            color: var(--mint);
+        }
+
+        .welcome {
+            color: var(--mint);
+            font-size: 13px;
+        }
+
+        .logout-form {
+            display: inline;
+            margin: 0;
+        }
+
+        .logout-button {
+            padding: 8px 12px;
+            border: 1px solid #64748b;
+            border-radius: 7px;
+            background: transparent;
+            color: white;
+            cursor: pointer;
+        }
+
+        main {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 48px 20px 65px;
+        }
+
+        .hero {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .eyebrow {
+            display: inline-block;
+            padding: 8px 13px;
+            border-radius: 30px;
+            background: #dff8ee;
+            color: #066653;
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.7px;
+            text-transform: uppercase;
+        }
+
+        .hero h1 {
+            margin: 18px 0 12px;
+            font-size: clamp(32px, 5vw, 49px);
+            line-height: 1.12;
+            letter-spacing: -1.7px;
+        }
+
+        .hero h1 span {
+            color: var(--green);
+        }
+
+        .hero p {
+            max-width: 650px;
+            margin: 0 auto;
+            color: var(--muted);
+            font-size: 16px;
+            line-height: 1.8;
+        }
+
+        .feature-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 14px;
+            margin: 28px 0;
+        }
+
+        .feature {
+            padding: 17px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .feature-icon {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .feature strong {
+            display: block;
+            font-size: 14px;
+        }
+
+        .feature p {
+            margin: 7px 0 0;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .panel {
+            padding: 30px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            box-shadow: 0 12px 35px rgba(16, 27, 53, 0.06);
+        }
+
+        .panel-heading {
+            margin-bottom: 23px;
+        }
+
+        .panel-heading h2 {
+            margin: 0 0 8px;
+            font-size: 23px;
+        }
+
+        .panel-heading p {
+            margin: 0;
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        textarea {
+            display: block;
+            width: 100%;
+            min-height: 220px;
+            padding: 16px;
+            resize: vertical;
+            border: 1px solid #cbd5e1;
+            border-radius: 10px;
+            font: inherit;
+            font-size: 14px;
+            line-height: 1.7;
+            color: var(--text);
+        }
+
+        textarea:focus {
+            outline: 3px solid #b9f5df;
+            border-color: var(--green);
+        }
+
+        .form-hint {
+            margin-top: 9px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .primary-button {
+            width: 100%;
+            margin-top: 20px;
+            padding: 15px 20px;
+            border: none;
+            border-radius: 9px;
+            background: var(--green);
+            color: white;
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .primary-button:hover {
+            background: #066653;
+        }
+
+        .result-section {
+            margin-top: 30px;
+            padding: 23px;
+            border: 1px solid var(--border);
+            border-radius: 13px;
+            background: #f8fafc;
+        }
+
+        .result-section > h2 {
+            margin-top: 0;
+            font-size: 23px;
+        }
+
+        .score-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            padding: 22px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 12px;
+        }
+
+        .score-label {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .score-number {
+            margin-top: 7px;
+            font-size: 38px;
+            font-weight: 800;
+            letter-spacing: -1px;
+        }
+
+        .score-number small {
+            color: var(--muted);
+            font-size: 17px;
+            font-weight: 500;
+        }
+
+        .risk-badge {
+            display: inline-block;
+            padding: 9px 13px;
+            border-radius: 8px;
+            background: #e2e8f0;
+            color: #334155;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .risk-very-high,
+        .risk-high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .risk-moderate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .risk-low {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .recommendation {
+            margin: 18px 0;
+            padding: 18px;
+            background: #ecfdf5;
+            border-left: 4px solid var(--green);
+            border-radius: 9px;
+            line-height: 1.7;
+        }
+
+        .recommendation strong {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .recommendation p {
+            margin: 0;
+            font-size: 14px;
+        }
+
+        .warning-item {
+            margin: 13px 0;
+            padding: 16px;
+            background: white;
+            border: 1px solid var(--border);
+            border-radius: 9px;
+            line-height: 1.7;
+            overflow-wrap: anywhere;
+        }
+
+        .severity {
+            display: inline-block;
+            margin-bottom: 8px;
+            padding: 5px 8px;
+            border-radius: 5px;
+            font-size: 11px;
+            font-weight: 800;
+        }
+
+        .severity-high {
+            background: #fee2e2;
+            color: #b91c1c;
+        }
+
+        .severity-moderate {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .action-text {
+            margin-bottom: 0;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .checklist {
+            padding-left: 22px;
+            line-height: 1.9;
+            font-size: 14px;
+        }
+
+        .disclaimer {
+            margin-top: 18px;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        .bottom-note {
+            margin-top: 23px;
+            padding: 15px;
+            border-radius: 9px;
+            background: #f8fafc;
+            color: var(--muted);
+            font-size: 12px;
+            line-height: 1.7;
+            text-align: center;
+        }
+
+        footer {
+            padding: 24px 20px;
+            background: var(--navy);
+            color: #cbd5e1;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.8;
+        }
+
+        @media (max-width: 650px) {
+            header {
+                padding: 17px 20px;
+            }
+
+            .nav {
+                align-items: flex-start;
+            }
+
+            .nav-links {
+                gap: 13px;
+            }
+
+            main {
+                padding-top: 34px;
+            }
+
+            .feature-row {
+                grid-template-columns: 1fr;
+            }
+
+            .panel {
+                padding: 20px;
+            }
+
+            .result-section {
+                padding: 16px;
+            }
+
+            .score-card {
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <nav class="nav">
+            <a href="/" class="brand" style="color: white;">
+                JobShield <span>AI</span>
+            </a>
+
+            <div class="nav-links">
+                {% if user.is_authenticated %}
+                    <span class="welcome">
+                        Hi, {{ user.username }}
+                    </span>
+
+                    <a href="/history/">My Reports</a>
+
+                    <form method="post" action="/logout/" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-button">
+                            Logout
+                        </button>
+                    </form>
+                {% else %}
+                    <a href="/login/">Login</a>
+                    <a href="/register/">Create Account</a>
+                {% endif %}
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section class="hero">
+            <span class="eyebrow">Your job search safety assistant</span>
+
+            <h1>
+                Check before<br>
+                <span>you apply.</span>
+            </h1>
+
+            <p>
+                Analyze job advertisements for potential scam warning signs.
+                Get a risk score, understand what looks suspicious, and learn
+                how to verify an opportunity before sharing money or information.
+            </p>
+        </section>
+
+        <section class="feature-row">
+            <article class="feature">
+                <div class="feature-icon">🛡️</div>
+                <strong>Risk Assessment</strong>
+                <p>Review a preliminary risk score and level.</p>
+            </article>
+
+            <article class="feature">
+                <div class="feature-icon">🔎</div>
+                <strong>Warning Indicators</strong>
+                <p>See detected warning signs and recommended actions.</p>
+            </article>
+
+            <article class="feature">
+                <div class="feature-icon">📄</div>
+                <strong>Saved Reports</strong>
+                <p>Keep your analysis history and download PDF reports.</p>
+            </article>
+        </section>
+
+        <section class="panel">
+            <div class="panel-heading">
+                <h2>Analyze a job advertisement</h2>
+                <p>
+                    Paste the job description below. The analyzer will check
+                    it against its current list of warning indicators.
+                </p>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+
+                <label for="job-description">
+                    Job advertisement
+                </label>
+
+                <textarea
+                    id="job-description"
+                    name="job_description"
+                    placeholder="Paste the complete job advertisement here..."
+                    required
+                ></textarea>
+
+                <div class="form-hint">
+                    Tip: Include the job requirements, payment conditions,
+                    application instructions, and recruiter messages if available.
+                </div>
+
+                <button type="submit" class="primary-button">
+                    Analyze Advertisement →
+                </button>
+            </form>
+
+            {% if result %}
+                <section class="result-section">
+                    <h2>Analysis Results</h2>
+
+                    {% if result.checked %}
+                        <div class="score-card">
+                            <div>
+                                <div class="score-label">RISK SCORE</div>
+
+                                <div class="score-number">
+                                    {{ result.score }}<small> / 100</small>
+                                </div>
+                            </div>
+
+                            <div>
+                                <div class="score-label" style="margin-bottom: 8px;">
+                                    RISK LEVEL
+                                </div>
+
+                                <span class="risk-badge {% if result.risk_level == 'Very High' %}risk-very-high{% elif result.risk_level == 'High' %}risk-high{% elif result.risk_level == 'Moderate' %}risk-moderate{% else %}risk-low{% endif %}">
+                                    {{ result.risk_level }} Risk
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="recommendation">
+                            <strong>JobShield AI Recommendation</strong>
+                            <p>{{ result.recommendation }}</p>
+                        </div>
+                    {% endif %}
+
+                    <h3>{{ result.status }}</h3>
+
+                    {% if result.warning_details %}
+                        <h3>Detected Warning Indicators</h3>
+
+                        {% for item in result.warning_details %}
+                            <article class="warning-item">
+                                {% if item.severity == "High" %}
+                                    <span class="severity severity-high">
+                                        HIGH CONCERN
+                                    </span>
+                                {% else %}
+                                    <span class="severity severity-moderate">
+                                        MODERATE CONCERN
+                                    </span>
+                                {% endif %}
+
+                                <div>{{ item.warning }}</div>
+
+                                <p class="action-text">
+                                    <strong>Recommended action:</strong>
+                                    {{ item.action }}
+                                </p>
+                            </article>
+                        {% endfor %}
+
+                    {% elif result.checked %}
+                        <p>
+                            No warning signs from the current checklist were
+                            detected. This does not guarantee the job is safe.
+                        </p>
+                    {% endif %}
+
+                    {% if result.checked %}
+                        <h3>Employer Verification Checklist</h3>
+
+                        <p>
+                            Before trusting the opportunity, complete these checks:
+                        </p>
+
+                        <ul class="checklist">
+                            <li>Visit the company's official website and verify its contact details.</li>
+                            <li>Check whether the vacancy appears on the official careers page.</li>
+                            <li>Contact the company through independently verified contact details.</li>
+                            <li>Review the recruiter's identity and professional history.</li>
+                            <li>Never pay money to secure a job or share OTPs, passwords, or UPI PINs.</li>
+                        </ul>
+
+                        <p class="disclaimer">
+                            This is a preliminary keyword-based check, not proof
+                            of fraud or legitimacy. The score is not a probability
+                            of fraud. Verify the employer independently.
+                        </p>
+                    {% endif %}
+                </section>
+            {% endif %}
+
+            <div class="bottom-note">
+                JobShield AI provides preliminary risk indicators to help you
+                make informed decisions. It cannot guarantee that an opportunity
+                is safe or fraudulent.
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <strong>JobShield AI</strong><br>
+        Helping job seekers recognize potential recruitment warning signs.<br>
+        Always verify employers independently.
+    </footer>
+</body>
+</html>
