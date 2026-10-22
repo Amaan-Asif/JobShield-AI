@@ -10,7 +10,7 @@ services:
     name: jobshield-ai
     runtime: python
     plan: free
-    buildCommand: "./build.sh"
+    buildCommand: "bash build.sh"
     startCommand: "gunicorn config.wsgi:application"
     envVars:
       - key: DATABASE_URL
