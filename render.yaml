@@ -1,0 +1,23 @@
+
+databases:
+  - name: jobshield-ai-db
+    plan: free
+    databaseName: jobshield_ai
+    user: jobshield_ai
+
+services:
+  - type: web
+    name: jobshield-ai
+    runtime: python
+    plan: free
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn config.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: jobshield-ai-db
+          property: connectionString
+      - key: DJANGO_SECRET_KEY
+        generateValue: true
+      - key: DJANGO_DEBUG
+        value: "False"
